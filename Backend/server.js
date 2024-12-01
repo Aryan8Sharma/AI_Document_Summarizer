@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const { sequelize } = require("./config/db");
 
 // Import routes
-// const authRoutes = require("./routes/auth");
+const authRoutes = require("./routes/auth");
 const professorRoutes = require("./routes/professor");
 // const studentRoutes = require("./routes/student");
 
@@ -14,7 +14,7 @@ const app = express();
 app.use(bodyParser.json());
 
 // Routes
-// app.use("/auth", authRoutes);
+app.use("/auth", authRoutes);
 app.use("/professor", professorRoutes);
 // app.use("/student", studentRoutes);
 

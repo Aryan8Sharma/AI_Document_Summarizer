@@ -1,9 +1,10 @@
 const express = require("express");
 const { uploadAndGenerateQuiz } = require("../controllers/professorController");
-// const { verifyToken } = require("../middlewares/authMiddleware");
+const { authenticateToken } = require("../middlewares/auth");
+const { Role } = require("../constants");
 
 const router = express.Router();
 
-router.post("/upload-and-generate-quiz", uploadAndGenerateQuiz);
+router.post("/upload-and-generate-quiz", authenticateToken(Role.PROFESSOR), uploadAndGenerateQuiz);
 
 module.exports = router;
