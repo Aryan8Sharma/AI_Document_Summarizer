@@ -7,7 +7,15 @@ const Question = sequelize.define("Question", {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
     },
-    quiz_id: { type: DataTypes.UUID, allowNull: false },
+    quiz_id: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        references: {
+            model: "Quizzes",
+            key: "id",
+        },
+        onDelete: "CASCADE",
+    },
     question_text: { type: DataTypes.TEXT, allowNull: false },
     options: { type: DataTypes.ARRAY(DataTypes.STRING), allowNull: false },
     correct_answer: { type: DataTypes.STRING, allowNull: false },

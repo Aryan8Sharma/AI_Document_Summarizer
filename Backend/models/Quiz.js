@@ -9,6 +9,8 @@ const Quiz = sequelize.define("Quiz", {
     },
     title: { type: DataTypes.STRING, allowNull: false },
     description: { type: DataTypes.TEXT },
+    summary: { type: DataTypes.TEXT },
+    num_questions: { type: DataTypes.INTEGER, allowNull: false },
     professor_id: { type: DataTypes.UUID, allowNull: false },
     start_time: { type: DataTypes.DATE },
     end_time: { type: DataTypes.DATE },

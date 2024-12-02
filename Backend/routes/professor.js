@@ -1,5 +1,5 @@
 const express = require("express");
-const { uploadAndGenerateQuiz } = require("../controllers/professorController");
+const { uploadAndGenerateQuiz } = require("../controllers/professor");
 const { authenticateToken } = require("../middlewares/auth");
 const { Role } = require("../constants");
 

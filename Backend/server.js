@@ -1,12 +1,12 @@
 require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
-const { sequelize } = require("./config/db");
+const { sequelize } = require("./models");
 
 // Import routes
 const authRoutes = require("./routes/auth");
 const professorRoutes = require("./routes/professor");
-// const studentRoutes = require("./routes/student");
+const studentRoutes = require("./routes/student");
 
 const app = express();
 
@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 // Routes
 app.use("/auth", authRoutes);
 app.use("/professor", professorRoutes);
-// app.use("/student", studentRoutes);
+app.use("/student", studentRoutes);
 
 // Database connection
 sequelize.sync({ alter: true }).then(() => {

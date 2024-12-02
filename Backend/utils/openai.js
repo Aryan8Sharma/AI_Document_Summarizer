@@ -5,11 +5,11 @@ const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY, // This is the default and can be omitted
 });
 
-exports.generateQuestions = async (content) => {
+exports.generateQuestions = async (content, numQuestions) => {
   try {
     // Define the structured prompt
     const prompt = `
-      You are an intelligent assistant helping to generate quiz questions. Based on the following content, create a quiz in JSON format. Each quiz should contain a title, description, and a nested array of questions.
+      You are an intelligent assistant helping to generate quiz questions. Based on the following content, create a quiz in JSON format. Each quiz should contain a title, description, and a nested array of ${numQuestions} questions.
 
       Each question object should include:
       - id: A unique identifier for the question.
