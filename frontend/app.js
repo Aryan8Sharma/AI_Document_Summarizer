@@ -18,7 +18,7 @@ function App() {
     <AuthProvider>
       <Navbar />
       <Switch>
-        {/* Public Routes */}
+        {/* Public Route */}
         <Route exact path="/login" component={Login} />
 
         {/* Student Routes */}
