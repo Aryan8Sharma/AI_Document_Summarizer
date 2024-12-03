@@ -1,4 +1,6 @@
-export const Role = Object.freeze({
+const Role = Object.freeze({
     STUDENT: "student",
     PROFESSOR: "professor"
 });
+
+exports.Role = Role;

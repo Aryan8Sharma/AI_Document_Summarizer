@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const { sequelize } = require("./models");
+const serverless = require("aws-serverless-express");
 
 // Import routes
 const authRoutes = require("./routes/auth");
@@ -23,8 +24,9 @@ sequelize.sync({ alter: true }).then(() => {
     console.log("Database connected and synchronized");
 });
 
-// Start server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+const server = serverless.createServer(app);
+
+exports.app = app;
+exports.handler = (event, context) => {
+    serverless.proxy(server, event, context);
+};
