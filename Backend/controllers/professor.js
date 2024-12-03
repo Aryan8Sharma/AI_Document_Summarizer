@@ -17,27 +17,29 @@ exports.uploadAndGenerateQuiz = [
     async (req, res) => {
         try {
             const professorId = req.user.id; // Extract from token
-            const { numQuestions } = req.body; // Number of questions
-            const file = req.file;
+            const { numQuestions, content } = req.body; // Number of questions
+            // const content = req.fileData;
+            console.log(content);
+            
 
-            if (!file) return res.status(400).json({ message: "File is required" });
+            // if (!file) return res.status(400).json({ message: "File is required" });
 
-            let content = "";
-            if (file.mimetype === "application/pdf") {
-                const pdfData = await pdfParse(file.buffer); // Parse directly from the buffer
-                content = pdfData.text;
-            } else if (file.mimetype === "text/plain") {
-                content = file.buffer.toString("utf8"); // Convert buffer to string
-            } else {
-                return res.status(400).json({ message: "Invalid file type" });
-            }
+            // let content = "";
+            // if (file.mimetype === "application/pdf") {
+            //     const pdfData = await pdfParse(file.buffer); // Parse directly from the buffer
+            //     content = pdfData.text;
+            // } else if (file.mimetype === "text/plain") {
+            //     content = file.buffer.toString("utf8"); // Convert buffer to string
+            // } else {
+            //     return res.status(400).json({ message: "Invalid file type" });
+            // }
 
             // const summary = await generateSummary(content); // Call OpenAI to summarize
             const chatResponse = await generateQuestions(content, numQuestions);
 
             const quiz = await Quiz.create({
                 professor_id: professorId,
-                title: `Quiz from ${file.originalname}`,
+                title: `Quiz from Test`,
                 description: "Auto-generated quiz",
                 num_questions: numQuestions,
             });

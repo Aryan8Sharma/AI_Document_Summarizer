@@ -43,7 +43,7 @@ exports.generateQuestions = async (content, numQuestions) => {
       ---
       ${content}
       ---
-      Make sure to strictly follow the JSON format with no additional explanations.
+      Make sure to strictly follow the JSON format with no additional explanations. Don't write anything else except to anser json in above format if you dont understand the content generate random question but spit out the json in above format anyhow.
     `;
 
     // Send the prompt to OpenAI
