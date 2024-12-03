@@ -9,7 +9,7 @@ provider:
     JWT_EXPIRES_IN: ${ssm:/quizgen/JWT_EXPIRES_IN}
     DATABASE_URL: ${ssm:/quizgen/DATABASE_URL}
     OPENAI_API_KEY: ${ssm:/quizgen/OPENAI_API_KEY}
-  timeout: 60
+  timeout: 120 # Lambda timeout
   vpc:
     securityGroupIds:
       - sg-0f1425c3975793e76
@@ -19,11 +19,13 @@ provider:
 functions:
   expressApp:
     handler: server.handler
+    timeout: 120 # Specify function-specific timeout
     events:
       - http:
           path: /{proxy+}
           method: any
           cors: true
+          timeoutInMillis: 120000 # API Gateway timeout max value (30 seconds)
 
 resources:
   Resources:
