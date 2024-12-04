@@ -1,12 +1,17 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 
 const Navbar = () => {
-    return (
-    <nav>
-      <Link to="/student/home">Student Home</Link>
-      <Link to="/professor/home">Professor Home</Link>
-      <Link to="/login">Login</Link>
+  const location = useLocation();
+
+  // Do not render "Quiz Platform" on the landing page
+  if (location.pathname === "/landing") {
+    return null;
+  }
+
+  return (
+    <nav className="navbar">
+      <h1>Quiz Platform</h1>
+      {/* Additional navbar links here */}
     </nav>
   );
 };

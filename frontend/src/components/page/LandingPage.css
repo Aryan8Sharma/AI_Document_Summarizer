@@ -1,0 +1,80 @@
+/* General Page Styling */
+.landing-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  min-height: 100vh;
+  background-color: #f9fafc;
+  font-family: Arial, sans-serif;
+}
+
+/* Tile Section */
+.tiles-section {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+  margin-bottom: 10px; /* Reduce the margin to bring "I am" section closer */
+}
+
+.tile-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.tile {
+  width: 80px; /* Tile size */
+  height: 80px; /* Tile size */
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* User Selection Section */
+.user-selection-section {
+  text-align: center;
+  margin-top: 0; /* Reset margin */
+}
+
+.heading {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.button-group {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.user-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 5px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.user-button:hover {
+  background-color: #0056b3;
+}
+
+.register-link {
+  margin-top: 15px;
+  font-size: 16px;
+  color: #333;
+}
+
+.register-link-text {
+  color: #007bff;
+  cursor: pointer;
+}
+
+.register-link-text:hover {
+  text-decoration: underline;
+}

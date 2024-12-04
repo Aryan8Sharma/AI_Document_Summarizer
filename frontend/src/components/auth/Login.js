@@ -1,51 +1,54 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; 
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const navigate = useNavigate(); // Replacing useHistory
+const login = ({ userType }) => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
+  const handleLogin = () => {
+    console.log("Login clicked");
+    if (!username || !password) {
+      alert("Please enter both username and password");
+      return;
+    }
 
-      const response = await fetch('/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (response.ok) {
-        alert('Login successful');
-        navigate('/student/home'); 
-      } else {
-        alert('Invalid credentials');
-      }
-    } catch (err) {
-      console.error('Error:', err);
+    if (userType === "student") {
+      console.log("Navigating to student dashboard");
+      navigate("/student/dashboard");
+    } else if (userType === "professor") {
+      console.log("Navigating to professor dashboard");
+      navigate("/professor/dashboard");
+    } else {
+      alert("Invalid user type!");
     }
   };
 
   return (
-    <form onSubmit={handleLogin}>
-      <label>Email:</label>
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-      />
-      <label>Password:</label>
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-      />
-      <button type="submit">Login</button>
-    </form>
+    <div>
+      <h1>{userType === "student" ? "Student Login" : "Professor Login"}</h1>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleLogin();
+        }}
+      >
+        <label>Username:</label>
+        <input
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <label>Password:</label>
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button type="submit">Login</button>
+      </form>
+    </div>
   );
 };
 
-export default Login;
+export default login;
