@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Footer = () => {
-  return <footer>Quiz Platform</footer>;
+  return <></>;
 };
 
 export default Footer;
