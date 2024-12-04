@@ -1,0 +1,44 @@
+name: Deploy Backend and Frontend
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Configure AWS credentials
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      # Step 3: Install and deploy backend
+      - name: Deploy Backend
+        working-directory: ./Backend
+        run: |
+          npm install
+          npx serverless deploy
+
+      # # Step 4: Build React frontend
+      # - name: Install frontend dependencies
+      #   working-directory: ./frontend
+      #   run: npm install
+
+      # - name: Build React app
+      #   working-directory: ./frontend
+      #   run: npm run build
+
+      # # Step 5: Deploy frontend to S3
+      # - name: Deploy frontend to S3
+      #   run: |
+      #     aws s3 sync ./frontend/build s3://<your-s3-bucket-name> --delete

@@ -1,0 +1,61 @@
+service: quizgen-app
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  region: us-east-2
+  environment:
+    JWT_SECRET: ${ssm:/quizgen/JWT_SECRET}
+    JWT_EXPIRES_IN: ${ssm:/quizgen/JWT_EXPIRES_IN}
+    DATABASE_URL: ${ssm:/quizgen/DATABASE_URL}
+    OPENAI_API_KEY: ${ssm:/quizgen/OPENAI_API_KEY}
+  timeout: 120 # Lambda timeout
+  vpc:
+    securityGroupIds:
+      - sg-0f1425c3975793e76
+    subnetIds:
+      - subnet-08ce309dcbc442b95
+
+functions:
+  expressApp:
+    handler: server.handler
+    timeout: 120 # Specify function-specific timeout
+    events:
+      - http:
+          path: /{proxy+}
+          method: any
+          cors: true
+          timeoutInMillis: 120000 # API Gateway timeout max value (30 seconds)
+
+resources:
+  Resources:
+    MyLambdaExecutionRole:
+      Type: AWS::IAM::Role
+      Properties:
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service: lambda.amazonaws.com
+              Action: sts:AssumeRole
+        Policies:
+          - PolicyName: LambdaRDSAccess
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - rds:DescribeDBInstances
+                    - rds:DescribeDBClusters
+                  Resource: arn:aws:rds:us-east-2:${aws:accountId}:db:quizgen-db
+          - PolicyName: SSMParameterAccessPolicy
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - ssm:GetParameter
+                    - ssm:GetParameters
+                    - ssm:GetParametersByPath
+                  Resource: arn:aws:ssm:us-east-2:${aws:accountId}:parameter/quizgen/*
