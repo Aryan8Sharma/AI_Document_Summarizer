@@ -1,4 +1,3 @@
-// src/components/student/Timer.js
 import React, { useEffect, useState } from "react";
 
 const Timer = ({ duration, onTimeUp }) => {
