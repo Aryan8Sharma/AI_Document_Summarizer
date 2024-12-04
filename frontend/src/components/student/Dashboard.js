@@ -1,4 +1,3 @@
-// src/components/student/Dashboard.js
 import React, { useState, useEffect } from "react";
 import "./Dashboard.css";
 import LearningCurveChart from './LearningCurveChart';
