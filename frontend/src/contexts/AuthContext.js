@@ -1,22 +1,28 @@
-
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [auth, setAuth] = useState({
-    token: sessionStorage.getItem('token') || null,
-    isLoggedIn: !!sessionStorage.getItem('token'),
+  const [auth, setAuth] = useState(() => {
+    const token = sessionStorage.getItem('token');
+    const user = sessionStorage.getItem('user');
+    return {
+      token: token || null,
+      user: user ? JSON.parse(user) : null,
+      isLoggedIn: !!token,
+    };
   });
 
-  const login = (token) => {
+  const login = (token, user) => {
     sessionStorage.setItem('token', token);
-    setAuth({ token, isLoggedIn: true });
+    sessionStorage.setItem('user', JSON.stringify(user));
+    setAuth({ token, user, isLoggedIn: true });
   };
 
   const logout = () => {
     sessionStorage.removeItem('token');
-    setAuth({ token: null, isLoggedIn: false });
+    sessionStorage.removeItem('user');
+    setAuth({ token: null, user: null, isLoggedIn: false });
   };
 
   return (

@@ -9,6 +9,8 @@ provider:
     JWT_EXPIRES_IN: ${ssm:/quizgen/JWT_EXPIRES_IN}
     DATABASE_URL: ${ssm:/quizgen/DATABASE_URL}
     OPENAI_API_KEY: ${ssm:/quizgen/OPENAI_API_KEY}
+    FRONTEND_BASE_URL: ${ssm:/quizgen/FRONTEND_BASE_URL}
+    NODE_ENV: ${ssm:/quizgen/NODE_ENV}
   timeout: 120 # Lambda timeout
   vpc:
     securityGroupIds:

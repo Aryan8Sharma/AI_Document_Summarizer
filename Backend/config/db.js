@@ -4,12 +4,12 @@ const { Sequelize } = require("sequelize");
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
     dialect: "postgres",
     logging: false,
-    dialectOptions: {
+    dialectOptions: process.env.NODE_ENV === 'production' ? {
         ssl: {
-            require: true, // This will help you. But you will see nwe error
-            rejectUnauthorized: false // This line will fix new error
+            require: true, // Ensure SSL is used in production
+            rejectUnauthorized: false // Allow unauthorized certificates in production
         }
-    }
+    } : undefined // No dialectOptions in local or non-production environments
 });
 
 const connectDB = async () => {

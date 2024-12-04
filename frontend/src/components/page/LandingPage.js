@@ -1,14 +1,15 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./LandingPage.css";
+import { Role } from "../../utils/constants";
 
 const LandingPage = () => {
   const navigate = useNavigate();
 
   const handleNavigation = (userType) => {
-    if (userType === "student") {
+    if (userType === Role.STUDENT) {
       navigate("/login/student");
-    } else if (userType === "professor") {
+    } else if (userType === Role.PROFESSOR) {
       navigate("/login/professor");
     }
   };
@@ -46,13 +47,13 @@ const LandingPage = () => {
         <div className="button-group">
           <button
             className="user-button"
-            onClick={() => handleNavigation("student")}
+            onClick={() => handleNavigation(Role.STUDENT)}
           >
             Student
           </button>
           <button
             className="user-button"
-            onClick={() => handleNavigation("professor")}
+            onClick={() => handleNavigation(Role.PROFESSOR)}
           >
             Professor
           </button>
