@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
+
+
 import { AuthProvider } from "./contexts/AuthContext";
 import Navbar from "./components/common/Navbar";
 import Footer from "./components/common/Footer";
