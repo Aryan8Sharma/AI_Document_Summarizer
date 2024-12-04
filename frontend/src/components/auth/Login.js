@@ -25,8 +25,8 @@ const login = ({ userType }) => {
   };
 
   return (
-    <div>
-      {/* <h1>{userType === "student" ? "Student Login" : "Professor Login"}</h1> */}
+    <div className="register-container">
+      <h2>{userType === "student" ? "Student Login" : "Professor Login"}</h2>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -34,8 +34,6 @@ const login = ({ userType }) => {
         }}
        title={userType + "Login"}>
         <div className="register-container">
-          {/* <img src="/assets/canvas.png" alt="Logo" className="logo" /> */}
-
           <label htmlFor="email">Email:</label>
           <input
             type="email"
@@ -55,7 +53,6 @@ const login = ({ userType }) => {
           <button className="user-button" type="submit">Login</button>
           {/* {message && <p className="success-message">{message}</p>} */}
         </div>
-        {/* <button type="submit">Login</button> */}
       </form>
     </div>
   );

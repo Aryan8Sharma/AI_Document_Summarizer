@@ -31,7 +31,7 @@
 }
 
 .register-container button {
-  background-color: #4caf50;
+  background-color: #007bff;
   color: white;
   border: none;
   padding: 10px 15px;
@@ -41,11 +41,16 @@
 }
 
 .register-container button:hover {
-  background-color: #45a049;
+  background-color: #007bff;
 }
 
 .success-message {
   margin-top: 20px;
   color: green;
   font-weight: bold;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
 }
