@@ -1,21 +1,23 @@
-import React, { useState } from "react";
+// src/components/student/Dashboard.js
+import React, { useState, useEffect } from "react";
 import "./Dashboard.css";
 import LearningCurveChart from './LearningCurveChart';
 import { Line } from "react-chartjs-2";
+import Timer from "./Timer"; // Import the Timer component
 
 const StudentDashboard = () => {
   const [quizzes, setQuizzes] = useState({
     Maths: [
-      { name: "Algebra", score: null, attempted: false },
-      { name: "Geometry", score: 85, attempted: true },
+      { name: "Algebra", score: null, attempted: false, timeLeft: 300 }, // 5 minutes
+      { name: "Geometry", score: 85, attempted: true, timeLeft: 0 },
     ],
     Physics: [
-      { name: "Kinematics", score: null, attempted: false },
-      { name: "Dynamics", score: 90, attempted: true },
+      { name: "Kinematics", score: null, attempted: false, timeLeft: 300 },
+      { name: "Dynamics", score: 90, attempted: true, timeLeft: 0 },
     ],
     Biology: [
-      { name: "Genetics", score: 80, attempted: true },
-      { name: "Ecology", score: null, attempted: false },
+      { name: "Genetics", score: 80, attempted: true, timeLeft: 0 },
+      { name: "Ecology", score: null, attempted: false, timeLeft: 300 },
     ],
   });
 
@@ -49,6 +51,11 @@ const StudentDashboard = () => {
     }
   };
 
+  const handleTimeUp = (className, quizName) => {
+    alert(`Time's up for the ${quizName} quiz in ${className}.`);
+    // Handle time up logic, such as submitting the quiz
+  };
+
   return (
     <div className="dashboard">
       <div className="left-panel">
@@ -65,6 +72,12 @@ const StudentDashboard = () => {
                   onClick={() => handleQuizClick(className, quiz.name)}
                 >
                   {quiz.name} {quiz.score !== null && <span>- {quiz.score}%</span>}
+                  {!quiz.attempted && (
+                    <Timer
+                      duration={quiz.timeLeft}
+                      onTimeUp={() => handleTimeUp(className, quiz.name)}
+                    />
+                  )}
                 </li>
               ))}
             </ul>
