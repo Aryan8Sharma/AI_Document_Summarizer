@@ -1,0 +1,19 @@
+/* Navbar Container */
+.navbar {
+    background-color: #2d3e50; /* Neutral dark background */
+    color: #ffffff; /* White text */
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 2px solid #1abc9c; /* Adds a subtle accent line */
+  }
+  
+  /* Title Styling */
+  .navbar-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    font-family: "Arial", sans-serif; /* Clean and standard font */
+    margin: 0;
+  }
+  

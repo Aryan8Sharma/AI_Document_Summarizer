@@ -1,4 +1,5 @@
 import { useLocation } from "react-router-dom";
+import "./Navbar.css"; // External CSS file for styling
 
 const Navbar = () => {
   const location = useLocation();
@@ -10,8 +11,7 @@ const Navbar = () => {
 
   return (
     <nav className="navbar">
-      <h1>Quiz Platform</h1>
-      {/* Additional navbar links here */}
+      <h1 className="navbar-title">Quiz Platform</h1>
     </nav>
   );
 };
