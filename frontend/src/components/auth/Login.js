@@ -12,18 +12,20 @@ const login = ({ userType }) => {
       alert("Please enter both username and password");
       return;
     }
-
+  
     if (userType === "student") {
       console.log("Navigating to student dashboard");
       navigate("/student/dashboard");
+      console.log("Navigation to student dashboard complete");
     } else if (userType === "professor") {
       console.log("Navigating to professor dashboard");
       navigate("/professor/dashboard");
+      console.log("Navigation to professor dashboard complete");
     } else {
       alert("Invalid user type!");
     }
   };
-
+  
   return (
     <div className="register-container">
       <h2>{userType === "student" ? "Student Login" : "Professor Login"}</h2>

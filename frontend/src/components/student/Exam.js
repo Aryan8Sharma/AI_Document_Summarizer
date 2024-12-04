@@ -10,7 +10,7 @@ const Exam = ({ match }) => {
 
   useEffect(() => {
     const fetchQuestions = async () => {
-      const response = await axios.get(⁠ /getExamsQuestions?quiz_id=${quizId} ⁠);
+      const response = await axios.get(`/getExamsQuestions?quiz_id=${quizId}`);
       setQuestions(response.data);
     };
     fetchQuestions();
@@ -38,7 +38,7 @@ const Exam = ({ match }) => {
             <label key={i}>
               <input
                 type="radio"
-                name={⁠ question-${idx} ⁠}
+                name={`question-${idx}`}
                 value={opt}
                 onChange={(e) =>
                   setAnswers({ ...answers, [q.id]: e.target.value })
