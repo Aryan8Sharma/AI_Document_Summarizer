@@ -27,7 +27,7 @@ jobs:
         working-directory: ./Backend
         run: |
           npm install
-          npx serverless deploy --stage production
+          npx serverless deploy
 
       # # Step 4: Build React frontend
       # - name: Install frontend dependencies
