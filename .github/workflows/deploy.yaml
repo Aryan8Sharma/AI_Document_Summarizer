@@ -25,6 +25,8 @@ jobs:
       # Step 3: Install and deploy backend
       - name: Deploy Backend
         working-directory: ./Backend
+        env:
+          SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
         run: |
           npm install
           npx serverless deploy
