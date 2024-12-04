@@ -32,7 +32,7 @@ const Register = () => {
 
   return (
     <div className="register-container">
-      <img src="/assets/canvas.png" alt="Logo" className="logo" />
+      {/* <img src="/assets/canvas.png" alt="Logo" className="logo" /> */}
       <h2>Register</h2>
       <form onSubmit={handleRegister}>
         <label htmlFor="username">Username:</label>

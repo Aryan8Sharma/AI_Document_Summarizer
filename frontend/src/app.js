@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes, useLocation } from "react-route
 import { AuthProvider } from "./contexts/AuthContext";
 import Navbar from "./components/common/Navbar";
 import Footer from "./components/common/Footer";
-import Login from "./components/auth/login";
+import Login from "./components/auth/Login";
 import Register from "./components/auth/register";
 import StudentHome from "./components/student/Home";
 import Exam from "./components/student/Exam";

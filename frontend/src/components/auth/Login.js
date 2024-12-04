@@ -26,26 +26,36 @@ const login = ({ userType }) => {
 
   return (
     <div>
-      <h1>{userType === "student" ? "Student Login" : "Professor Login"}</h1>
+      {/* <h1>{userType === "student" ? "Student Login" : "Professor Login"}</h1> */}
       <form
         onSubmit={(e) => {
           e.preventDefault();
           handleLogin();
         }}
-      >
-        <label>Username:</label>
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <label>Password:</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button type="submit">Login</button>
+       title={userType + "Login"}>
+        <div className="register-container">
+          {/* <img src="/assets/canvas.png" alt="Logo" className="logo" /> */}
+
+          <label htmlFor="email">Email:</label>
+          <input
+            type="email"
+            id="email"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+          <label htmlFor="password">Password:</label>
+          <input
+            type="password"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <button className="user-button" type="submit">Login</button>
+          {/* {message && <p className="success-message">{message}</p>} */}
+        </div>
+        {/* <button type="submit">Login</button> */}
       </form>
     </div>
   );
