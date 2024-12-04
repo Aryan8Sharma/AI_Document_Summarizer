@@ -1,9 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import "./Dashboard.css";
 import LearningCurveChart from './LearningCurveChart';
 import { Line } from "react-chartjs-2";
+import { AuthContext } from "../../contexts/AuthContext";
+import { Role } from "../../utils/constants";
+import { useNavigate } from "react-router-dom";
 
 const StudentDashboard = () => {
+  const { auth } = useContext(AuthContext);
+  const navigate = useNavigate();
+
   const [quizzes, setQuizzes] = useState({
     Maths: [
       { name: "Algebra", score: null, attempted: false },
@@ -49,10 +55,23 @@ const StudentDashboard = () => {
     }
   };
 
+  useEffect(() => {
+    if (!auth.isLoggedIn) {
+      navigate("/landing");
+    }
+    if (auth.user.role == Role.PROFESSOR) {
+      navigate("/professor/dashboard");
+    }
+  }, []);
+
+  if (!auth.isLoggedIn) {
+    return null;
+  }
+
   return (
     <div className="dashboard">
       <div className="left-panel">
-        <h2>Hello, Student Name</h2>
+        <h2>Hello, {auth.user.name}</h2>
         <h3>Quizzes</h3>
         {Object.keys(quizzes).map((className) => (
           <div key={className}>
