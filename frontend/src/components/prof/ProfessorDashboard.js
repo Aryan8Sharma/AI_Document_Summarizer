@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import "./ProfessorDashboard.css";
+import { AuthContext } from "../../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { Role } from "../../utils/constants";
 
 const ProfessorDashboard = () => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
@@ -8,6 +11,8 @@ const ProfessorDashboard = () => {
     { student: "Alice", quiz: "Maths Quiz", score: 85 },
     { student: "Bob", quiz: "Physics Quiz", score: 90 },
   ]);
+  const { auth } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleFileUpload = (event) => {
     event.preventDefault();
@@ -32,11 +37,24 @@ const ProfessorDashboard = () => {
     setScores(updatedScores);
   };
 
+  useEffect(() => {
+    if (!auth.isLoggedIn) {
+      navigate("/landing");
+    }
+    if (auth.user.role == Role.STUDENT) {
+      navigate("/student/dashboard");
+    }
+  }, []);
+
+  if (!auth.isLoggedIn) {
+    return null;
+  }
+
   return (
     <div className="dashboard-container">
       {/* Left Panel */}
       <div className="left-panel">
-        <h2>Welcome, Professor</h2>
+        <h2>Welcome, {auth.user.name}</h2>
 
         {/* Notes Upload Section */}
         <h3>Upload Notes</h3>

@@ -1,46 +1,50 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../contexts/AuthContext";
 import "./register.css";
+import { Role } from "../../utils/constants";
+import { signupService } from "../../services/authService";
 
 const Register = () => {
-  const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [userType, setUserType] = useState("student"); // Default to "student"
-  const [message, setMessage] = useState(""); // For success message
+  const [userType, setUserType] = useState(Role.STUDENT);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleRegister = (e) => {
+  const { login } = useContext(AuthContext);
+
+  const handleRegister = async (e) => {
     e.preventDefault();
 
-    // Simulate a registration process
-    const registrationData = {
-      username,
-      email,
-      password,
-      userType,
-    };
-
-    console.log("Registration Data:", registrationData);
-
-    // Mock API call (replace with real API call if needed)
-    setTimeout(() => {
-      setMessage("Registered successfully! Redirecting to the login page...");
-      setTimeout(() => navigate("/"), 2000); // Redirect to the landing page after 2 seconds
-    }, 1000);
+    try {
+      const response = await signupService(name, email, password, userType);
+      const { token, user } = response;
+      login(token, user);
+      // Show success message and redirect to login
+      setMessage("Registration successful! Redirecting to login...");
+      setTimeout(() => {
+        navigate(`/${user.role}/dashboard`);
+      }, 2000); // Redirect to login page after 2 seconds
+    } catch (error) {
+      // Handle error during registration
+      setError("Registration failed. Please try again.");
+      setMessage(""); // Clear any success messages if an error occurs
+    }
   };
 
   return (
     <div className="register-container">
-      {/* <img src="/assets/canvas.png" alt="Logo" className="logo" /> */}
       <h2>Register</h2>
       <form onSubmit={handleRegister}>
-        <label htmlFor="username">Username:</label>
+        <label htmlFor="name">Name:</label>
         <input
           type="text"
-          id="username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          id="name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
           required
         />
         <label htmlFor="email">Email:</label>
@@ -65,12 +69,14 @@ const Register = () => {
           value={userType}
           onChange={(e) => setUserType(e.target.value)}
         >
-          <option value="student">Student</option>
-          <option value="professor">Professor</option>
+          <option value={Role.STUDENT}>Student</option>
+          <option value={Role.PROFESSOR}>Professor</option>
         </select>
         <button type="submit">Register</button>
       </form>
+
       {message && <p className="success-message">{message}</p>}
+      {error && <p className="error-message">{error}</p>}
     </div>
   );
 };

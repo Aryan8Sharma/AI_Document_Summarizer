@@ -3,13 +3,23 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const { sequelize } = require("./models");
 const serverless = require("aws-serverless-express");
+const cors = require("cors");
 
 // Import routes
 const authRoutes = require("./routes/auth");
 const professorRoutes = require("./routes/professor");
 const studentRoutes = require("./routes/student");
 
+const { FRONTEND_BASE_URL } = process.env;
+
 const app = express();
+
+// Use CORS middleware
+app.use(cors({
+    origin: FRONTEND_BASE_URL,
+    methods: "GET,POST,PUT,DELETE",
+    credentials: true
+}));
 
 // Middleware
 app.use(bodyParser.json());

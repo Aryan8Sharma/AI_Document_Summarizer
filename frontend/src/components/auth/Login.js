@@ -1,47 +1,57 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../contexts/AuthContext";
+import { loginService } from "../../services/authService";
+import { Role } from "../../utils/constants";
 
-const login = ({ userType }) => {
-  const [username, setUsername] = useState("");
+const Login = ({ userType }) => {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    console.log("Login clicked");
-    if (!username || !password) {
-      alert("Please enter both username and password");
+  const handleLogin = async () => {
+    setError(null); // Clear any previous errors
+    if (!email || !password) {
+      alert("Please enter both email and password");
       return;
     }
 
-    if (userType === "student") {
-      console.log("Navigating to student dashboard");
-      navigate("/student/dashboard");
-    } else if (userType === "professor") {
-      console.log("Navigating to professor dashboard");
-      navigate("/professor/dashboard");
-    } else {
-      alert("Invalid user type!");
+    try {
+      const { token, user } = await loginService(email, password);
+      login(token, user); // Save token and user to context
+
+      // Navigate based on user role
+      if (user.role === Role.STUDENT) {
+        navigate("/student/dashboard");
+      } else if (user.role === Role.PROFESSOR) {
+        navigate("/professor/dashboard");
+      } else {
+        alert("Unknown role, please contact admin!");
+      }
+    } catch (err) {
+      console.error("Login failed:", err.message);
+      setError("Login failed. Please check your credentials and try again.");
     }
   };
 
   return (
     <div>
-      {/* <h1>{userType === "student" ? "Student Login" : "Professor Login"}</h1> */}
       <form
         onSubmit={(e) => {
           e.preventDefault();
           handleLogin();
         }}
-       title={userType + "Login"}>
+        title={userType + " Login"}
+      >
         <div className="register-container">
-          {/* <img src="/assets/canvas.png" alt="Logo" className="logo" /> */}
-
           <label htmlFor="email">Email:</label>
           <input
             type="email"
             id="email"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
           <label htmlFor="password">Password:</label>
@@ -52,13 +62,14 @@ const login = ({ userType }) => {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <button className="user-button" type="submit">Login</button>
-          {/* {message && <p className="success-message">{message}</p>} */}
+          <button className="user-button" type="submit">
+            Login
+          </button>
+          {error && <p className="error-message">{error}</p>}
         </div>
-        {/* <button type="submit">Login</button> */}
       </form>
     </div>
   );
 };
 
-export default login;
+export default Login;

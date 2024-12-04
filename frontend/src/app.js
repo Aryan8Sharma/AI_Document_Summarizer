@@ -14,6 +14,7 @@ import LandingPage from "./components/page/LandingPage";
 import StudentDashboard from "./components/student/Dashboard";
 import ProfessorDashboard from "./components/prof/ProfessorDashboard";
 import HomePage from "./components/page/HomePage";
+import { Role } from "./utils/constants";
 
 function App() {
   const location = useLocation(); // Hook to get the current path
@@ -28,8 +29,8 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/landing" element={<LandingPage />} />
-        <Route path="/login/student" element={<Login userType="student" />} />
-        <Route path="/login/professor" element={<Login userType="professor" />} />
+        <Route path="/login/student" element={<Login userType={Role.STUDENT} />} />
+        <Route path="/login/professor" element={<Login userType={Role.PROFESSOR} />} />
         <Route path="/register" element={<Register />} />
         <Route path="/student/dashboard" element={<StudentDashboard />} />
         <Route path="/professor/dashboard" element={<ProfessorDashboard />} />
