@@ -12,11 +12,6 @@ provider:
     FRONTEND_BASE_URL: ${ssm:/quizgen/FRONTEND_BASE_URL}
     NODE_ENV: ${ssm:/quizgen/NODE_ENV}
   timeout: 120 # Lambda timeout
-  vpc:
-    securityGroupIds:
-      - sg-0f1425c3975793e76
-    subnetIds:
-      - subnet-08ce309dcbc442b95
 
 functions:
   expressApp:
@@ -26,7 +21,16 @@ functions:
       - http:
           path: /{proxy+}
           method: any
-          cors: true
+          cors:
+            origin: ${self:provider.environment.FRONTEND_BASE_URL}
+            headers:
+              - Content-Type
+              - Authorization
+              - X-Amz-Date
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+            allowCredentials: true
           timeoutInMillis: 120000 # API Gateway timeout max value (30 seconds)
 
 resources:

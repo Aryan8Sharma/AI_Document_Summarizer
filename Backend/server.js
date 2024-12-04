@@ -17,8 +17,9 @@ const app = express();
 // Use CORS middleware
 app.use(cors({
     origin: FRONTEND_BASE_URL,
-    methods: "GET,POST,PUT,DELETE",
-    credentials: true
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
 // Middleware
