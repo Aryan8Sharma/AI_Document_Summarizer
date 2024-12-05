@@ -40,7 +40,7 @@ exports.uploadAndGenerateQuiz = [
 
             const quiz = await Quiz.create({
                 professor_id: professorId,
-                title: `Quiz from Test`,
+                title: chatResponse.quiz.title,
                 description: "Auto-generated quiz",
                 num_questions: numQuestions,
             });

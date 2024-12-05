@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import "./Dashboard.css";
 import LearningCurveChart from './LearningCurveChart';
 import { Line } from "react-chartjs-2";
 import api from "../../utils/api";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../contexts/AuthContext";
+import { Role } from "../../utils/constants";
 
 const StudentDashboard = () => {
   const [quizzes, setQuizzes] = useState({
   });
+  const { auth } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
@@ -34,12 +37,12 @@ const StudentDashboard = () => {
   const handleQuizClick = (className, quizId) => {
     // Find the quiz object in the state
     const quiz = quizzes[className].find((q) => q.id === quizId);
-  
+
     if (quiz.attempted) {
       alert("You have already attempted this quiz!");
     } else {
       navigate(`/student/quiz?quizId=${quizId}&className=${className}`);
-  
+
       // Mark the quiz as attempted and update the score (you can customize this logic as needed)
       const updatedQuizzes = {
         ...quizzes,
@@ -47,14 +50,23 @@ const StudentDashboard = () => {
           q.id === quizId ? { ...q, attempted: true, score: Math.floor(Math.random() * 100) } : q
         ),
       };
-  
+
       // Update the state with the modified quizzes
       setQuizzes(updatedQuizzes);
-  
+
       // Log for debugging
       console.log(`Updated quizzes:`, updatedQuizzes);
     }
   };
+
+  useEffect(() => {
+    if (!auth.isLoggedIn) {
+      navigate("/landing");
+    }
+    if (auth.isLoggedIn && auth.user.role == Role.PROFESSOR) {
+      navigate("/professor/dashboard");
+    }
+  }, [auth, navigate])
 
   useEffect(() => {
     const fetchQuizzes = async () => {
@@ -64,18 +76,18 @@ const StudentDashboard = () => {
         });
 
         // let attempted = false;
-        
+
 
         // Map quizzes to the required format
         const formattedQuizzes = {
           General: response.data.quizzes.map((quiz) => ({
             id: quiz.id,
             name: quiz.title, // Use "title" as the name
-            score: sessionStorage.getItem(quiz.id) == null ?null : sessionStorage.getItem(quiz.id), // Assuming no score info in the response
-            attempted: sessionStorage.getItem(quiz.id) == null ?false : true, // Assuming no attempted info in the response
+            score: sessionStorage.getItem(quiz.id) == null ? null : sessionStorage.getItem(quiz.id), // Assuming no score info in the response
+            attempted: sessionStorage.getItem(quiz.id) == null ? false : true, // Assuming no attempted info in the response
           })),
         };
-        
+
         setQuizzes(formattedQuizzes); // Set the transformed data
       } catch (err) {
         console.error(err);
@@ -88,7 +100,7 @@ const StudentDashboard = () => {
   return (
     <div className="dashboard">
       <div className="left-panel">
-        <h2>Hello, Student Name</h2>
+        <h2>Hello, {auth.user.name}</h2>
         <h3>Quizzes</h3>
         {Object.keys(quizzes).map((className) => (
           <div key={className}>
