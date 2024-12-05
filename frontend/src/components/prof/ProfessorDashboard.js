@@ -3,32 +3,54 @@ import "./ProfessorDashboard.css";
 import { AuthContext } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Role } from "../../utils/constants";
+import { generateQuizQuestions } from "../../services/profService";
 
 const ProfessorDashboard = () => {
-  const [uploadedFiles, setUploadedFiles] = useState([]);
   const [quizzes, setQuizzes] = useState([]);
+  const [loading, setLoading] = useState(false);
+
   const [scores, setScores] = useState([
     { student: "Alice", quiz: "Maths Quiz", score: 85 },
     { student: "Bob", quiz: "Physics Quiz", score: 90 },
   ]);
+  const [file, setFile] = useState(null);
+  const [numQuestions, setNumQuestions] = useState("");
   const { auth } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleFileUpload = (event) => {
     event.preventDefault();
-    const file = event.target.files[0];
-    if (file) {
-      const newFile = { name: file.name, size: file.size };
-      setUploadedFiles([...uploadedFiles, newFile]);
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile); // Store the selected file
     }
   };
 
-  const handleGenerateQuiz = () => {
-    const newQuiz = {
-      name: `Quiz ${quizzes.length + 1}`,
-      questions: ["Question 1", "Question 2", "Question 3"],
-    };
-    setQuizzes([...quizzes, newQuiz]);
+  const handleNumberChange = (event) => {
+    setNumQuestions(event.target.value); // Store the number input
+  };
+
+  const handleGenerateQuiz = async (event) => {
+    event.preventDefault();
+
+    if (!file || !numQuestions) {
+      alert("Please select a file and enter number of questions.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const {quiz, questions} = await generateQuizQuestions(file, numQuestions); // Call the service to upload the file and text
+      quiz.questions = questions;
+      setQuizzes([quiz]);
+      console.log(quiz);
+
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      alert("Quiz generation failed.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleEditScore = (index, newScore) => {
@@ -41,10 +63,10 @@ const ProfessorDashboard = () => {
     if (!auth.isLoggedIn) {
       navigate("/landing");
     }
-    if (auth.user.role == Role.STUDENT) {
+    if (auth.user.role === Role.STUDENT) {
       navigate("/student/dashboard");
     }
-  }, []);
+  }, [auth, navigate]);
 
   if (!auth.isLoggedIn) {
     return null;
@@ -64,13 +86,19 @@ const ProfessorDashboard = () => {
             accept=".pdf,.doc,.docx,.ppt,.pptx"
             onChange={handleFileUpload}
           />
+          <input
+            type="number"
+            placeholder="Number of questions"
+            value={numQuestions}
+            onChange={handleNumberChange}
+          />
         </form>
         <ul>
-          {uploadedFiles.map((file, index) => (
-            <li key={index}>
+          {file &&
+            <li>
               {file.name} ({(file.size / 1024).toFixed(2)} KB)
             </li>
-          ))}
+          }
         </ul>
       </div>
 
@@ -80,13 +108,27 @@ const ProfessorDashboard = () => {
         <div className="quizzes-section">
           <h3>Generate Quizzes</h3>
           <button onClick={handleGenerateQuiz}>Generate Quiz</button>
+          {loading && <div>Loading...</div>}
           <ul>
             {quizzes.map((quiz, index) => (
               <li key={index}>
-                {quiz.name}
+                Title: {quiz.title}
                 <ul>
                   {quiz.questions.map((question, qIndex) => (
-                    <li key={qIndex}>{question}</li>
+                    <>
+                    <li key={qIndex}>
+                      {qIndex+1}.{question.question}
+                      <br />
+                      <ul>
+                        {quiz.questions[qIndex].options.map((option, oIndex) => (
+                          <li key={oIndex}>
+                            - {option}
+                          </li>
+                        ))}
+                      </ul>
+                    </li>
+                    <br />
+                    </>
                   ))}
                 </ul>
               </li>
