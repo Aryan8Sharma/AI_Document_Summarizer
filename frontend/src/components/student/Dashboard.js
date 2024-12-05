@@ -1,23 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Dashboard.css";
 import LearningCurveChart from './LearningCurveChart';
 import { Line } from "react-chartjs-2";
+import api from "../../utils/api";
+import { useNavigate } from "react-router-dom";
 
 const StudentDashboard = () => {
   const [quizzes, setQuizzes] = useState({
-    Maths: [
-      { name: "Algebra", score: null, attempted: false },
-      { name: "Geometry", score: 85, attempted: true },
-    ],
-    Physics: [
-      { name: "Kinematics", score: null, attempted: false },
-      { name: "Dynamics", score: 90, attempted: true },
-    ],
-    Biology: [
-      { name: "Genetics", score: 80, attempted: true },
-      { name: "Ecology", score: null, attempted: false },
-    ],
   });
+
+  const navigate = useNavigate();
 
   const activityData = {
     labels: ["Aug", "Sept", "Oct", "Nov", "Dec", "Jan"],
@@ -39,15 +31,59 @@ const StudentDashboard = () => {
     ],
   };
 
-  const handleQuizClick = (className, quizName) => {
-    const quiz = quizzes[className].find((q) => q.name === quizName);
+  const handleQuizClick = (className, quizId) => {
+    // Find the quiz object in the state
+    const quiz = quizzes[className].find((q) => q.id === quizId);
+  
     if (quiz.attempted) {
       alert("You have already attempted this quiz!");
     } else {
-      // Redirect to quiz page (to be implemented)
-      alert(`Starting ${quizName} quiz for ${className}`);
+      navigate(`/student/quiz?quizId=${quizId}&className=${className}`);
+  
+      // Mark the quiz as attempted and update the score (you can customize this logic as needed)
+      const updatedQuizzes = {
+        ...quizzes,
+        [className]: quizzes[className].map((q) =>
+          q.id === quizId ? { ...q, attempted: true, score: Math.floor(Math.random() * 100) } : q
+        ),
+      };
+  
+      // Update the state with the modified quizzes
+      setQuizzes(updatedQuizzes);
+  
+      // Log for debugging
+      console.log(`Updated quizzes:`, updatedQuizzes);
     }
   };
+
+  useEffect(() => {
+    const fetchQuizzes = async () => {
+      try {
+        // Use Axios to fetch data
+        const response = await api.get("/student/quiz", {
+        });
+
+        // let attempted = false;
+        
+
+        // Map quizzes to the required format
+        const formattedQuizzes = {
+          General: response.data.quizzes.map((quiz) => ({
+            id: quiz.id,
+            name: quiz.title, // Use "title" as the name
+            score: sessionStorage.getItem(quiz.id) == null ?null : sessionStorage.getItem(quiz.id), // Assuming no score info in the response
+            attempted: sessionStorage.getItem(quiz.id) == null ?false : true, // Assuming no attempted info in the response
+          })),
+        };
+        
+        setQuizzes(formattedQuizzes); // Set the transformed data
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchQuizzes();
+  }, []);
 
   return (
     <div className="dashboard">
@@ -56,15 +92,15 @@ const StudentDashboard = () => {
         <h3>Quizzes</h3>
         {Object.keys(quizzes).map((className) => (
           <div key={className}>
-            <h4>{className}</h4>
+            <h4>{className} (Click On Quiz to Start.)</h4>
             <ul>
               {quizzes[className].map((quiz) => (
                 <li
-                  key={quiz.name}
+                  key={quiz.id}
                   className={quiz.attempted ? "quiz-locked" : ""}
-                  onClick={() => handleQuizClick(className, quiz.name)}
+                  onClick={() => handleQuizClick(className, quiz.id)}
                 >
-                  {quiz.name} {quiz.score !== null && <span>- {quiz.score}%</span>}
+                  {quiz.name} {quiz.score !== null && <span>- {quiz.score}</span>}
                 </li>
               ))}
             </ul>
