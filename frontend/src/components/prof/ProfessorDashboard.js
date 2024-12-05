@@ -63,7 +63,7 @@ const ProfessorDashboard = () => {
     if (!auth.isLoggedIn) {
       navigate("/landing");
     }
-    if (auth.user.role === Role.STUDENT) {
+    if (auth.isLoggedIn && auth.user.role === Role.STUDENT) {
       navigate("/student/dashboard");
     }
   }, [auth, navigate]);
