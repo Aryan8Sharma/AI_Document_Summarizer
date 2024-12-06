@@ -27,8 +27,6 @@ This project aims to create an interactive canvas platform where users can uploa
 7. **Interactive Canvas**:
    - The project provides a canvas where users can visualize the content, summaries, and keyword clusters. Users can interact with the canvas to expand topics, view detailed summaries, and add personal annotations.
 
-## Technologies Used: THIS IS STILL VARIABLE TO CHANGE!
-![AI-Powered Notes Demo](https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExMTV0ZzNoeGZ6NXczOHU1YWgzNDdnbjNva2ZkNXJmdmdqOHkwZ3k4byZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/26tn33aiTi1jkl6H6/giphy.gif)
 
 ## Project Overview
 1. **Backend**: 
