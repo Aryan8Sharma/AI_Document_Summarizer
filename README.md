@@ -52,5 +52,3 @@ This project aims to create an interactive canvas platform where users can uploa
    - **Docker**: For containerizing the application.
    - **Kubernetes**: For managing deployments and scaling the application.
    - **AWS Lambda** (for serverless functions), **AWS EC2**, or **Heroku**: For hosting the backend and frontend.
-
-## Getting Started
