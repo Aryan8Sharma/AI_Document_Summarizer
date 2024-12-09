@@ -1,54 +1,155 @@
-# AI-Powered Enterprise Document Summarizer
+
+# QuizGen: A Serverless Application for Automated Quiz Generation
+
+**QuizGen** is a cloud-native, serverless application that dynamically generates quizzes from uploaded files. The project integrates a React-based frontend and a serverless backend hosted on AWS to provide educators and users with a scalable and efficient platform.
+
 ![image](https://github.com/user-attachments/assets/aa901bc2-ada2-434e-92af-a276b77343d2)
 
 
-## Project Overview
-This project aims to create an interactive canvas platform where users can upload class notes in PDF format, and the integrated AI will summarize the notes. The platform will also offer additional AI-powered features such as keyword extraction, sentiment analysis, topic clustering, and intelligent search functionality. The platform will leverage advanced Natural Language Processing (NLP) techniques to distill complex information into digestible insights, enhancing decision-making and operational efficiency. The goal is to enhance the learning experience by making class notes more accessible and easier to comprehend.
+---
+
+## Table of Contents
+
+1. [Overview](#overview)
+2. [Features](#features)
+3. [System Architecture](#system-architecture)
+4. [Technologies Used](#technologies-used)
+5. [Installation and Deployment](#installation-and-deployment)
+   - [Backend](#backend)
+   - [Frontend](#frontend)
+6. [Usage](#usage)
+7. [Folder Structure](#folder-structure)
+
+---
+
+## Overview
+
+QuizGen is designed to simplify the process of quiz generation using uploaded documents. The application leverages AI (via OpenAI APIs) to extract content from PDFs and text files, automatically generating questions and quizzes. It features a React frontend hosted on an S3 bucket, with a backend powered by AWS Lambda and API Gateway.
+
+---
 
 ## Features
-1. **Class Notes Summarization**: 
-   - The primary feature of the project is AI-based summarization of uploaded PDFs. Users can upload class notes, and the AI will generate a concise summary of the content, highlighting key points.
-   
-2. **Keyword Extraction**:
-   - The AI extracts important keywords from the notes, allowing users to quickly identify the main topics and terms discussed in the document.
 
-3. **Sentiment Analysis**:
-   - Analyzes the tone of the class notes to determine whether the content is generally positive, neutral, or negative, helping students understand the instructor’s stance on key topics.
+- **File Upload and Parsing**: Users can upload PDF or text files, which are parsed for content.
+- **AI-Powered Quiz Generation**: Integrates OpenAI APIs to generate questions based on the uploaded content.
+- **User Authentication**: JWT-based secure authentication for professors and students.
+- **Quiz Storage**: Quizzes and questions are stored in an RDS PostgreSQL database for later retrieval.
+- **Scalable Architecture**: Serverless backend and frontend ensure high scalability.
+- **CI/CD Pipeline**: Automated deployment via GitHub Actions.
 
-4. **Topic Clustering**:
-   - The AI groups similar sections of the class notes into clusters based on topic similarity, providing users with an organized structure of the content.
+---
 
-5. **Intelligent Search**:
-   - Provides an advanced search tool where users can input queries, and the AI searches for relevant content in the class notes, returning direct matches and related concepts.
+## System Architecture
 
-6. **Handwriting Detection (Optional)**:
-   - If handwritten notes are uploaded as images, the AI can detect and transcribe the text into a digital format, enabling all other features on handwritten notes.
+### Backend:
+- Built using **Node.js** and **Serverless Framework**.
+- Uses AWS services such as **Lambda**, **API Gateway**, and **RDS (PostgreSQL)**.
+- Handles file uploads, AI integration, and database operations.
 
-7. **Interactive Canvas**:
-   - The project provides a canvas where users can visualize the content, summaries, and keyword clusters. Users can interact with the canvas to expand topics, view detailed summaries, and add personal annotations.
+### Frontend:
+- Developed using **React**.
+- Hosted on an **S3 bucket** with public access.
+- Manages user interactions, including file uploads and quiz retrieval.
 
+---
 
-## Project Overview
-1. **Backend**: 
-   - **Node.js** or **Python (Flask/Django)**: For handling backend logic and API requests.
-   - **AI/ML Libraries**: 
-     - **Transformers** for summarization and keyword extraction.
-     - **spaCy** or **NLTK** for Natural Language Processing tasks.
-     - **TensorFlow** or **PyTorch** for additional deep learning models if needed.
+## Technologies Used
 
-2. **Frontend**: 
-   - **React.js** or **Vue.js**: For building the user interface, interactive canvas, and visualizations.
-   - **Canvas API**: For rendering and managing the interactive canvas.
+### Backend:
+- **Node.js**: Runtime environment for the serverless backend.
+- **Serverless Framework**: Infrastructure-as-code for AWS deployment.
+- **Sequelize ORM**: For database operations with PostgreSQL.
+- **AWS Services**: Lambda, API Gateway, RDS, S3, and SSM Parameter Store.
+- **OpenAI API**: For generating quizzes dynamically.
 
-3. **AI Models**:
-   - **Hugging Face Models** for text summarization, sentiment analysis, and clustering.
-   - **OpenAI API** (optional): For more advanced features like question-answering and concept generation.
+### Frontend:
+- **React**: Single-page application (SPA).
+- **React Router**: For routing and navigation.
+- **AWS S3**: Static file hosting for the frontend.
 
-4. **Database**:
-   - **MongoDB**: For storing user-uploaded PDFs, AI-generated summaries, and other metadata.
-   - **Amazon S3** or **Google Cloud Storage**: For file storage and retrieval.
+### CI/CD:
+- **GitHub Actions**: Automates deployment for both frontend and backend.
 
-5. **Deployment**:
-   - **Docker**: For containerizing the application.
-   - **Kubernetes**: For managing deployments and scaling the application.
-   - **AWS Lambda** (for serverless functions), **AWS EC2**, or **Heroku**: For hosting the backend and frontend.
+---
+
+## Installation and Deployment
+
+### Backend
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/your-username/quizgen.git
+   cd quizgen/Backend
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+3. **Configure environment variables**:
+   Set up the following in your AWS SSM Parameter Store:
+   - `JWT_SECRET`
+   - `JWT_EXPIRES_IN`
+   - `DATABASE_URL`
+   - `OPENAI_API_KEY`
+   - `FRONTEND_BASE_URL`
+
+4. **Deploy the backend**:
+   ```bash
+   npx serverless deploy --stage production
+   ```
+
+### Frontend
+
+1. **Navigate to the frontend directory**:
+   ```bash
+   cd quizgen/frontend
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+3. **Build the React app**:
+   ```bash
+   npm run build
+   ```
+
+4. **Deploy to S3**:
+   ```bash
+   aws s3 sync ./build s3://your-s3-bucket-name --delete
+   ```
+
+---
+
+## Usage
+
+### For Professors:
+1. **Sign Up** or **Log In** to upload a file (PDF or text).
+2. Choose the number of questions for the quiz.
+3. Review and save the generated quiz.
+
+### For Students:
+1. View assigned quizzes.
+2. Answer the questions and submit the quiz.
+3. Receive auto-graded results.
+
+---
+
+## Folder Structure
+
+```
+quizgen/
+├── Backend/             # Serverless backend code
+│   ├── models/          # Database models
+│   ├── controllers/     # API controllers
+│   ├── server.js        # Express server setup
+│   └── serverless.yml   # Serverless deployment configuration
+├── frontend/            # React frontend code
+│   ├── src/             # React app source files
+│   ├── public/          # Static files
+│   └── package.json     # Frontend dependencies
+└── .github/workflows/   # GitHub Actions CI/CD workflows
+```
