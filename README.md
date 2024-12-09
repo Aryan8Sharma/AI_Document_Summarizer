@@ -20,7 +20,7 @@
 6. [Usage](#usage)
 7. [Folder Structure](#folder-structure)
 
-Project Report : [View the PDF](./AI_Document_Summarizer.pdf)
+Project Report : [View the PDF](./AI_Document_Summarizer-Report.pdf)
 
 ---
 
